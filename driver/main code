@@ -1,0 +1,28 @@
+
+package parkinglot;
+
+public class Parkinglot {
+
+    public static void main(String[] args) {
+        System.out.println("Welcome to pakinglot software");
+        
+    }
+    
+}
+//four types of floors
+class floor
+{
+    int max_vechicals;
+    boolean status_of_parking_space[]=new boolean[max_vechicals];
+    
+}
+
+class building
+{
+    
+}
+
+class display_panel
+{
+    
+}
