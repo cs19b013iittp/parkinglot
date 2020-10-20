@@ -21,6 +21,97 @@ class DisplayBoard{
 
 }
 
+class Building {
+    Scanner input = new Scanner(System.in);
+    int getFloor(String vehicle){
+        if(vehicle.toLowerCase().equals("truck")){
+            Truck t = new Truck();
+        }
+        else if (vehicle.toLowerCase().equals("car")){
+            Car t = new Car();
+        }
+        else if (vehicle.toLowerCase().equals("bike")){
+            Bike t = new Bike();
+        }
+        else
+            return -1;
+        return 0;
+    }
+
+    void isEV(){
+        System.out.println("Is it EV, type yes/no");
+        String isEV = input.nextLine();
+        while(true) {
+            if (isEV.toLowerCase().equals("yes")) {
+                int spot = t.getEV();
+                if(spot==-1){
+                    System.out.println("No vacant spots available, come back later.");
+                }
+                break;
+            }
+            else if(isEV.toLowerCase().equals("no")){
+                isNotEV();
+                break;
+            }
+            else {
+                System.out.println("Invalid input: Type yes/no");
+            }
+        }
+
+    }
+
+    void isNotEV(){
+        System.out.println("Do you want VIP service: Type yes/no");
+        String isVIP = input.nextLine();
+        int spot;
+        while(true) {
+            if (isVIP.toLowerCase().equals("yes")) {
+                spot = t.getVIP();
+                if(spot==-1){
+                    System.out.println("No vacant spots available, come back later.");
+                }
+                break;
+            }
+            else if(isVIP.toLowerCase().equals("no")){
+                spot = t.getEconomy();
+                if(spot==-1){
+                    System.out.println("No vacant spots available, come back later.");
+                }
+                break;
+            }
+            else {
+                System.out.println("Invalid input: Type yes/no");
+            }
+        }
+    }
+
+    int exit(int floorNumber, int spotNumber){
+        if(floorNumber==1){
+//            Truck obj = new Truck();
+//            obj.
+        }
+        else if(floorNumber==2){
+            Car obj = new Car();
+                if (spotNumber>=1 && spotNumber <=85){
+                    obj.ExitEconomyService();
+                }
+                else if(spotNumber>=86 && spotNumber <=95){
+                    obj.ExitEVService();
+                }
+                else if(spotNumber>=96 && spotNumber <=100){
+                    obj.ExitVIPService();
+                }
+                else
+                    return -1;
+            return 0;
+        }
+        else if(floorNumber==3){
+
+        }
+    }
+
+}
+
 interface Floor{
     public int getTotalSpots();
     public int getTotalEV();
