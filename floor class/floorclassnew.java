@@ -4,8 +4,7 @@ import java.time.LocalTime;
 public class FloorClass {
     public static void main(String[] args) {            // driver code
         Scanner scan = new Scanner(System.in);
-        Car c = new Car();
-        Bike bk = new Bike();
+        
         Building parkinglot = new Building();
         int n;
         while(true)
