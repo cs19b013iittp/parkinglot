@@ -195,19 +195,31 @@ class Building {
 
 }
 
-/* **************************************************************************************************************** */
-
 abstract class Floor{
-    abstract public int getTotalSpots();
-    abstract public int getTotalEV();
-    abstract public int getTotalVIP();
+
+    protected int totalVIP = 0;
+    protected int totalEV = 0;
+    public int economyVacancy = 0;
+    public int EVVacancy = 0;
+    public int VIPVacancy = 0;
+    public int current = 0;
+
+    public int getTotalEV() {
+        return totalEV;
+    }
+
+    public int getTotalVIP() {
+        return totalVIP;
+    }
+
     abstract public int getEconomyVacancies();
     abstract public int getEVVacancies();
     abstract public int getVIPVacancies();
-    private void portFolio(){}
+
     abstract public int getEconomy();
     abstract public int getEV();
     abstract public int getVIP();
+
     DisplayBoard db = new DisplayBoard();
 }
 
@@ -216,12 +228,6 @@ class Car extends Floor{                // Floor number = 2
     Scanner scan = new Scanner(System.in);
 
     private static final int totalSpots = 100;    // 1-85:Economy, 86-95:EV, 96-100:VIP
-    private int totalVIP = 5;
-    private int totalEV = 10;
-    private int current = 0;
-    int economyVacancy = 0;
-    int EVVacancy = 0;
-    int VIPVacancy = 0;
 
     static int[] floor2 = new int[totalSpots];
     static int[] now = new int[totalSpots];
@@ -234,10 +240,14 @@ class Car extends Floor{                // Floor number = 2
         for(int i=0;i<100;i++){
             System.out.print(paid[i] + " ");
         }
-        System.out.println("\n");
+        System.out.println("");
     }
 
     Car(){
+
+        totalVIP = 5;
+        totalEV = 10;
+
         for(int i=0;i<totalSpots;i++){
             floor2[i] = 0;                        // 0 for vacant, 1 for filled
             now[i] = 0;
@@ -246,18 +256,6 @@ class Car extends Floor{                // Floor number = 2
             rCharge[i] = 0;
             carWash[i] = 0;
         }
-    }
-
-    public int getTotalSpots(){
-        return totalSpots;
-    }
-
-    public int getTotalEV() {
-        return totalEV;
-    }
-
-    public int getTotalVIP() {
-        return totalVIP;
     }
 
     public int getEconomyVacancies(){           // gets number of free economy class spots
@@ -326,6 +324,11 @@ class Car extends Floor{                // Floor number = 2
         return -1;                              // no vacancy available
     }
 
+    private void EnterEconomyService(int cur){
+        LocalTime tm = LocalTime.now();
+        now[cur-1] = tm.getHour();
+    }
+
     public int ExitEconomyService(int cur){
         LocalTime tm = LocalTime.now();
         then[cur - 1] = tm.getHour();
@@ -355,11 +358,6 @@ class Car extends Floor{                // Floor number = 2
                 System.out.println("Invalid option. Try again");
             }
         }
-    }
-
-    private void EnterEconomyService(int cur){
-        LocalTime tm = LocalTime.now();
-        now[cur-1] = tm.getHour();
     }
 
     private void EnterEVService(int cur){
@@ -401,16 +399,15 @@ class Car extends Floor{                // Floor number = 2
             if (payHere == 0) {
                 paid[cur - 1] = 0;
                 System.out.println("Please pay at the exit");
-                break;
+                return 1;
             } else if (payHere == 1) {
                 portFolio(cur);
-                break;
+                floor2[cur-1]=0;
+                return 0;
             } else {
                 System.out.println("Invalid option. Try again");
             }
         }
-        floor2[cur-1]=0;
-        return 0;
     }
 
     private void EnterVIPService(int cur){
@@ -429,7 +426,7 @@ class Car extends Floor{                // Floor number = 2
         carWash[cur-1]=wash;
     }
 
-    public int[] ExitVIPService(int cur){
+    public int ExitVIPService(int cur){
         LocalTime tm = LocalTime.now();
         then[cur - 1] = tm.getHour();
         int time = then[cur - 1] - now[cur - 1];
@@ -452,16 +449,15 @@ class Car extends Floor{                // Floor number = 2
             if (payHere == 0) {
                 paid[cur - 1] = 0;
                 System.out.println("Please pay at the exit");
-                break;
+                return 1;
             } else if (payHere == 1) {
                 portFolio(cur);
-                return null;
+                floor2[cur-1]=0;
+                return 0;
             } else {
                 System.out.println("Invalid option. Try again");
             }
         }
-        floor2[cur-1]=0;
-        return paid;
     }
 
     private void portFolio(int cur){
@@ -483,17 +479,11 @@ class Car extends Floor{                // Floor number = 2
 
 /* ************************************* BIKE BIKE BIKE BIKE BIKE BIKE ******************************************* */
 
-class Bike implements Floor{
+class Bike extends Floor{
 
     Scanner scan = new Scanner(System.in);
 
     private static final int totalSpots = 200;    // 1-150:Economy, 151-180:EV, 181-200:VIP
-    private int totalVIP = 30;
-    private int totalEV = 20;
-    private int current = 0;
-    int economyVacancy = 0;
-    int EVVacancy = 0;
-    int VIPVacancy = 0;
 
     static int[] floor3 = new int[totalSpots];
     static int[] now = new int[totalSpots];
@@ -510,6 +500,10 @@ class Bike implements Floor{
     }
 
     Bike(){
+
+        totalVIP = 30;
+        totalEV = 20;
+
         for(int i=0;i<totalSpots;i++){
             floor3[i] = 0;                        // 0 for vacant, 1 for filled
             now[i] = 0;
@@ -518,18 +512,6 @@ class Bike implements Floor{
             rCharge[i] = 0;
             bikeWash[i] = 0;
         }
-    }
-
-    public int getTotalSpots(){
-        return totalSpots;
-    }
-
-    public int getTotalEV() {
-        return totalEV;
-    }
-
-    public int getTotalVIP() {
-        return totalVIP;
     }
 
     public int getEconomyVacancies(){           // gets number of free economy class spots
@@ -598,6 +580,11 @@ class Bike implements Floor{
         return -1;                              // no vacancy available
     }
 
+    private void EnterEconomyService(int cur){
+        LocalTime tm = LocalTime.now();
+        now[cur-1] = tm.getHour();
+    }
+
     public int ExitEconomyService(int cur){
         LocalTime tm = LocalTime.now();
         then[cur - 1] = tm.getHour();
@@ -627,11 +614,6 @@ class Bike implements Floor{
                 System.out.println("Invalid option. Try again");
             }
         }
-    }
-
-    private void EnterEconomyService(int cur){
-        LocalTime tm = LocalTime.now();
-        now[cur-1] = tm.getHour();
     }
 
     private void EnterEVService(int cur){
@@ -673,16 +655,15 @@ class Bike implements Floor{
             if (payHere == 0) {
                 paid[cur - 1] = 0;
                 System.out.println("Please pay at the exit");
-                break;
+                return 1;
             } else if (payHere == 1) {
                 portFolio(cur);
-                break;
+                floor3[cur-1]=0;
+                return 0;
             } else {
                 System.out.println("Invalid option. Try again");
             }
         }
-        floor3[cur-1]=0;
-        return 0;
     }
 
     private void EnterVIPService(int cur){
@@ -701,7 +682,7 @@ class Bike implements Floor{
         bikeWash[cur-1]=wash;
     }
 
-    public int[] ExitVIPService(int cur){
+    public int ExitVIPService(int cur){
         LocalTime tm = LocalTime.now();
         then[cur - 1] = tm.getHour();
         int time = then[cur - 1] - now[cur - 1];
@@ -724,16 +705,15 @@ class Bike implements Floor{
             if (payHere == 0) {
                 paid[cur - 1] = 0;
                 System.out.println("Please pay at the exit");
-                break;
+                return 1;
             } else if (payHere == 1) {
                 portFolio(cur);
-                return null;
+                floor3[cur-1]=0;
+                return 0;
             } else {
                 System.out.println("Invalid option. Try again");
             }
         }
-        floor3[cur-1]=0;
-        return paid;
     }
 
     private void portFolio(int cur){
@@ -755,17 +735,11 @@ class Bike implements Floor{
 
 /* ************************** TRUCK TRUCK TRUCK TRUCK TRUCK TRUCK ******************************* */
 
-class Truck implements Floor{
+class Truck extends Floor{
 
     Scanner scan = new Scanner(System.in);
 
     private static final int totalSpots = 50;    // 1-30:Economy, 31-40:EV, 41-50:VIP
-    private int totalVIP = 10;
-    private int totalEV = 10;
-    private int current = 0;
-    int economyVacancy = 0;
-    int EVVacancy = 0;
-    int VIPVacancy = 0;
 
     static int[] floor1 = new int[totalSpots];
     static int[] now = new int[totalSpots];
@@ -778,10 +752,14 @@ class Truck implements Floor{
         for(int i=0;i<totalSpots;i++){
             System.out.print(paid[i] + " ");
         }
-        System.out.println("\n");
+        System.out.println("");
     }
 
     Truck(){
+
+        totalVIP = 10;
+        totalEV = 10;
+
         for(int i=0;i<totalSpots;i++){
             floor1[i] = 0;                        // 0 for vacant, 1 for filled
             now[i] = 0;
@@ -790,18 +768,6 @@ class Truck implements Floor{
             rCharge[i] = 0;
             truckWash[i] = 0;
         }
-    }
-
-    public int getTotalSpots(){
-        return totalSpots;
-    }
-
-    public int getTotalEV() {
-        return totalEV;
-    }
-
-    public int getTotalVIP() {
-        return totalVIP;
     }
 
     public int getEconomyVacancies(){           // gets number of free economy class spots
@@ -870,6 +836,11 @@ class Truck implements Floor{
         return -1;                              // no vacancy available
     }
 
+    private void EnterEconomyService(int cur){
+        LocalTime tm = LocalTime.now();
+        now[cur-1] = tm.getHour();
+    }
+
     public int ExitEconomyService(int cur){
         LocalTime tm = LocalTime.now();
         then[cur - 1] = tm.getHour();
@@ -899,11 +870,6 @@ class Truck implements Floor{
                 System.out.println("Invalid option. Try again");
             }
         }
-    }
-
-    private void EnterEconomyService(int cur){
-        LocalTime tm = LocalTime.now();
-        now[cur-1] = tm.getHour();
     }
 
     private void EnterEVService(int cur){
@@ -945,16 +911,15 @@ class Truck implements Floor{
             if (payHere == 0) {
                 paid[cur - 1] = 0;
                 System.out.println("Please pay at the exit");
-                break;
+                return 1;
             } else if (payHere == 1) {
                 portFolio(cur);
-                break;
+                floor1[cur-1]=0;
+                return 0;
             } else {
                 System.out.println("Invalid option. Try again");
             }
         }
-        floor1[cur-1]=0;
-        return 0;
     }
 
     private void EnterVIPService(int cur){
@@ -973,7 +938,7 @@ class Truck implements Floor{
         truckWash[cur-1]=wash;
     }
 
-    public int[] ExitVIPService(int cur){
+    public int ExitVIPService(int cur){
         LocalTime tm = LocalTime.now();
         then[cur - 1] = tm.getHour();
         int time = then[cur - 1] - now[cur - 1];
@@ -996,16 +961,15 @@ class Truck implements Floor{
             if (payHere == 0) {
                 paid[cur - 1] = 0;
                 System.out.println("Please pay at the exit");
-                break;
+                return 1;
             } else if (payHere == 1) {
                 portFolio(cur);
-                return null;
+                floor1[cur-1]=0;
+                return 0;
             } else {
                 System.out.println("Invalid option. Try again");
             }
         }
-        floor1[cur-1]=0;
-        return paid;
     }
 
     private void portFolio(int cur){
