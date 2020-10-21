@@ -6,31 +6,68 @@ public class FloorClass {
         Scanner scan = new Scanner(System.in);
         Car c = new Car();
         Bike bk = new Bike();
-//        int spot1 = c.getEconomy();
-//        int spot2 = c.getEconomy();
-//        System.out.println(spot1);
-//        System.out.println(spot2);
-//        int s3= c.getEconomy();
-//        System.out.println(s3);
-//        c.ExitEconomyService(spot2);
-//        int s4=c.getEconomy();
-//        System.out.println(s4);
-        Building b = new Building();
-        System.out.println("Enter floor number");
-        b.getFloor(scan.nextLine());
-        System.out.println("Enter floor number");
-        b.getFloor(scan.nextLine());
-        c.display();
-        b.exit(2, 1);
-        c.display();
-        System.out.println("Enter floor number");
-        b.getFloor(scan.nextLine());
-        System.out.println("Enter floor number");
-        b.getFloor(scan.nextLine());
-        bk.display();
-        b.exit(3, 2);
-        bk.display();
-        c.display();
+        Building parkinglot = new Building();
+        int n;
+        while(true)
+        {
+                system.out.println("please enter 1 to show display board,2 to park your vehical,3  to exit");
+                n=scan.nextInt();
+                if(n==1)
+                {
+                    parkinglot.show_display();
+                }
+                else if(n==2)
+                {
+                    String vehical_type;
+                    boolean isev,isvip;
+                    int floor_no;
+                    system.out.println("enter 'bike' if your vehical is bike");
+                    system.out.println("enter 'car' if your vehical is car");
+                    system.out.println("enter 'truck' if your vehical is truck");
+                    vehical_type=scan.nextLine();
+                    system.out.println("enter ev if you have an electric type of vehical");
+                    isev=scan.nextBoolean();
+                    system.out.println("if you want vip service enter true else false");
+                    isvip=scan.nextBoolean();
+                    if(!parkinglot.validate(vehical_type,isev,isvip))                       //return false if invalid input
+                        continue;
+                    else
+                    {
+                        floor_no=parkinglot.getfloor(vehical_type,isev,isvip);              //return 0 if not found
+                        if(floor_no==0)
+                            system.out.println("parking lot is full.please visit some other time");
+                        else
+                        {
+                            system.out.println("you have to park your vehical in floor number : "+floor_no);
+                            parkinglot.show_display(floor_no);
+                        }
+                        
+                    }
+                }
+                else if(n==3)
+                {
+                    int floorno,spotno,pay;
+                    system.out.println("please enter your floor number");
+                    floorno=scan.nextInt();
+                    system.out.println("please enter the spot you have been assigned to");
+                    spotno=scan.nextInt();
+                    parkinglot.get_details(floorno,spotno);                     //print all details of customer
+                    system.out.println("where do you want to pay the bill?");
+                    system.out.println("enter 1 to pay information portel 2 for paying at the end of floor");
+                    pay=scan.nextInt();
+                    if(pay==1)
+                    {
+                        parkinglot.pay_at_info_portel(floor_no,spot_no);
+                        system.out.println("thanks for using our parking lot");
+                    }
+                    else
+                    {
+                        parkinglot.pay_at_end_of_floor(floor_no,spot_no);
+                        system.out.println("thanks for using our parking lot");
+                    }
+                }
+        }
+        
     }
 }
 
