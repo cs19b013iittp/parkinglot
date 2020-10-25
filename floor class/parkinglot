@@ -1,0 +1,455 @@
+package parkinglot;//package com.com_spidey;
+import java.util.Scanner;
+import java.time.LocalTime;
+
+public class Parkinglot {
+    public static void main(String[] args) {            // driver code
+        Scanner scan = new Scanner(System.in);
+        Car c = new Car();
+//        Bike bk = new Bike();
+//        Truck tr = new Truck();
+        Building parkinglot = new Building();
+        int n;
+        while(true)
+        {
+            System.out.println("please enter 1 to show display board,2 to park your vehical,3  to exit");
+            n=scan.nextInt();
+            if(n==1)
+            {
+                parkinglot.show_display(2);           // Correct here
+            }
+            else if(n==2)
+            {
+                String vehical_type;
+                boolean isev,isvip;
+                int floor_no;
+                System.out.println("enter 'bike' if your vehical is bike");
+                System.out.println("enter 'car' if your vehical is car");
+                System.out.println("enter 'truck' if your vehical is truck");
+                vehical_type=scan.next();
+                System.out.println("if ev enter true else false");
+                isev=scan.nextBoolean();
+                System.out.println("if you want vip service enter true else false");
+                isvip=scan.nextBoolean();
+                floor_no = parkinglot.validate(vehical_type);
+                if(floor_no !=-1)
+                {
+                    parkinglot.getFloor(vehical_type, isev, isvip);
+//                        parkinglot.show_display(floor_no);
+                }
+                else
+                    System.out.println("Invalid vehicle type: bike,car,truck.");
+            }
+            else if(n==3)
+            {
+                int floorno,spotno,pay;
+                System.out.println("please enter your floor number");
+                floorno=scan.nextInt();
+                System.out.println("please enter the spot you have been assigned to");
+                spotno=scan.nextInt();
+                System.out.println("where do you want to pay the bill?");
+                System.out.println("enter 1 to pay information portel 2 for paying at the end of floor");
+                pay=scan.nextInt();
+                if(pay==1)
+                {
+                    int a=parkinglot.pay_at_info_portel(floorno,spotno);
+                    System.out.println("please exit through gate "+a);
+                    System.out.println("thanks for using our parking lot");
+                }
+                else
+                {
+                    int a=parkinglot.pay_at_end_of_floor(floorno,spotno);
+                    System.out.println("please exit through gate "+a);
+                    System.out.println("thanks for using our parking lot");
+                }
+            }
+        }
+
+    }
+}
+
+
+class Building {
+    Scanner input = new Scanner(System.in);
+    Car c = new Car();
+//    Bike bk = new Bike();
+//    Truck tr = new Truck();
+    public void show_display(int floorNumber){
+        if(floorNumber==2){
+            for(int i=0; i<100; i++){
+                System.out.println(Car.floor2[i]);
+            }
+        }
+    }
+    public int validate(String vehicleType){
+        if(vehicleType.toLowerCase().equals("truck"))
+            return 1;
+        else if (vehicleType.toLowerCase().equals("car"))
+            return 2;
+        else if (vehicleType.toLowerCase().equals("bike"))
+            return 3;
+        else
+            return -1;
+    }
+    public int getFloor(String vehicle, boolean ev, boolean vip){
+        if(vehicle.toLowerCase().equals("truck")){
+                // Fill for truck.
+        }
+        else if (vehicle.toLowerCase().equals("car")){
+            if(ev){
+                System.out.println("Go to floor 2");
+                int spot = c.getEV();
+                System.out.println("Assigned spot: " + spot);
+                if (spot==-1){
+                    System.out.println("No vacant spots available, come back later.");
+                }
+            }
+            else if(vip){
+                System.out.println("Go to floor 2");
+                int spot = c.getVIP();
+                System.out.println("Assigned spot: " + spot);
+                if(spot==-1){
+                    System.out.println("No vacant spots available, come back later.");
+                }
+            }
+            else {
+                System.out.println("Go to floor 2");
+                int spot = c.getEconomy();
+                System.out.println("Assigned spot: " + spot);
+                if(spot==-1){
+                    System.out.println("No vacant spots available, come back later.");
+                }
+            }
+        }
+        else if (vehicle.toLowerCase().equals("bike")){
+            // Fill for bike.
+        }
+        else
+            return -1;
+        return 0;
+    }
+    public int pay_at_end_of_floor(int floorNumber, int spotNumber){
+        if(floorNumber==1){
+            // Fill for truck
+        }
+        else if (floorNumber==2){
+            int time,amount;
+            if (spotNumber>=1 && spotNumber <=85) {
+                time = c.ExitEconomyService(spotNumber);
+                System.out.println("Time : " + time);
+                amount = timeToCash(time,floorNumber,spotNumber);
+                System.out.println("Amount: "+amount);
+                paymentOptions(floorNumber, spotNumber);
+                System.out.println("Please visit again.");
+                Car.floor2[spotNumber - 1] = 0;
+                return 1;
+            }
+            else if(spotNumber>=86 && spotNumber <=95){
+                time = c.ExitEVService(spotNumber);
+                System.out.println("Time: " + time);
+                amount = timeToCash(time,floorNumber,spotNumber);
+                System.out.println("Amount: "+amount);
+                paymentOptions(floorNumber, spotNumber);
+                System.out.println("Please visit again.");
+                Car.floor2[spotNumber-1]=0;
+                return 2;
+            }
+            else if(spotNumber>=96 && spotNumber <=100){
+                time = c.ExitVIPService(spotNumber);
+                System.out.println("Time: " + time);
+                amount = timeToCash(time,floorNumber,spotNumber);
+                System.out.println("Amount: "+amount);
+                paymentOptions(floorNumber, spotNumber);
+                System.out.println("Please visit again.");
+                Car.floor2[spotNumber-1]=0;
+                return 2;
+            }
+
+        }
+        else{
+            // Fill for bike
+        }
+    }
+
+    public int pay_at_info_portel(int floorNumber,int spotNumber){
+        if(floorNumber==1){
+            // Fill for truck
+        }
+        else if (floorNumber==2){
+            int time,amount;
+            if (spotNumber>=1 && spotNumber <=85) {
+                time = c.ExitEconomyService(spotNumber);
+                System.out.println("Time : " + time);
+                amount = timeToCash(time,floorNumber,spotNumber);
+                System.out.println("Amount: "+amount);
+                paymentOptions(floorNumber, spotNumber);
+                System.out.println("Please visit again.");
+                Car.floor2[spotNumber - 1] = 0;
+                return 1;
+            }
+            else if(spotNumber>=86 && spotNumber <=95){
+                time = c.ExitEVService(spotNumber);
+                System.out.println("Time: " + time);
+                amount = timeToCash(time,floorNumber,spotNumber);
+                System.out.println("Amount: "+amount);
+                paymentOptions(floorNumber, spotNumber);
+                System.out.println("Please visit again.");
+                Car.floor2[spotNumber-1]=0;
+                return 2;
+            }
+            else if(spotNumber>=96 && spotNumber <=100){
+                time = c.ExitVIPService(spotNumber);
+                System.out.println("Time: " + time);
+                amount = timeToCash(time,floorNumber,spotNumber);
+                System.out.println("Amount: "+amount);
+                paymentOptions(floorNumber, spotNumber);
+                System.out.println("Please visit again.");
+                Car.floor2[spotNumber-1]=0;
+                return 2;
+            }
+
+        }
+        else{
+            // Fill for bike
+        }
+    }
+
+    public void paymentOptions(int floor, int spot){
+        Scanner scan = new Scanner(System.in);
+        if(floor==1){
+            // Fill for truck
+        }
+        else if(floor==2) {
+            System.out.println("Press 1 for cash and press 2 for credit card payment >> ");
+            int cr = scan.nextInt();
+            while (true) {
+                if (cr != 1 && cr != 2) {
+                    System.out.println("Invalid option. Try again");
+                } else {
+                    Car.paid[spot - 1] = 1;
+                    System.out.println("Payment successful");
+                    break;
+                }
+            }
+        }
+        else{
+            // Fill for bike
+        }
+    }
+
+    public int timeToCash(int time, int floor, int spot){
+        int amount=0;
+        if(floor==1){
+            // Fill for truck
+        }
+        else if(floor==2) {
+            if (time <= 60) {
+                amount = 30;
+            } else if (time > 60 && time <= 180) {
+                amount = 40;
+            } else {
+                amount = 40 + 10 * ((time - 180) / 60);
+            }
+            if (Car.rCharge[spot - 1] == 1) {
+                amount += 20;                                     // additional charges for washing the vehicle
+            }
+        }
+        else {
+            // Fill for bike
+        }
+        return amount;
+    }
+}
+
+
+class DisplayBoard{
+
+}
+
+interface Floor{
+    public int getTotalSpots();
+    public int getTotalEV();
+    public int getTotalVIP();
+    public int getEconomyVacancies();
+    public int getEVVacancies();
+    public int getVIPVacancies();
+//    DisplayBoard db = new DisplayBoard();
+}
+
+class Car implements Floor{                // Floor number = 2
+
+    Scanner scan = new Scanner(System.in);
+
+    private static final int totalSpots = 100;    // 1-85:Economy, 86-95:EV, 96-100:VIP
+    private int totalVIP = 5;
+    private int totalEV = 10;
+    private int current = 0;
+    int economyVacancy = 0;
+    int EVVacancy = 0;
+    int VIPVacancy = 0;
+
+    static int[] floor2 = new int[totalSpots];
+    static int[] now = new int[totalSpots];
+    static int[] then = new int[totalSpots];
+    static int[] paid = new int[totalSpots];
+    static int[] rCharge = new int[totalSpots];
+    static int[] carWash = new int[totalSpots];
+
+    Car(){
+        for(int i=0;i<totalSpots;i++){
+            floor2[i] = 0;                        // 0 for vacant, 1 for filled
+            now[i] = 0;
+            then[i] = 0;
+            paid[i] = 0;
+            rCharge[i] = 0;
+            carWash[i] = 0;
+        }
+    }
+
+    public int getTotalSpots(){
+        return totalSpots;
+    }
+
+    public int getTotalEV() {
+        return totalEV;
+    }
+
+    public int getTotalVIP() {
+        return totalVIP;
+    }
+
+    public int getEconomyVacancies(){           // gets number of free economy class spots
+        for(int i=0;i<85;i++){
+            if(floor2[i]==0){
+                economyVacancy++;
+            }
+        }
+        return economyVacancy;
+    }
+
+    public int getEVVacancies(){                // gets number of free EV class spots
+        for(int i=85;i<95;i++){
+            if(floor2[i]==0){
+                EVVacancy++;
+            }
+        }
+        return EVVacancy;
+    }
+
+    public int getVIPVacancies(){               // gets number of free VIP class spots
+        for(int i=95;i<100;i++){
+            if(floor2[i]==0){
+                VIPVacancy++;
+            }
+        }
+        return VIPVacancy;
+    }
+
+    public int getEconomy(){                    // assigns a free spot, if available
+        for(int i=0;i<85;i++){
+            if(floor2[i]==0){
+                floor2[i]=1;
+                current = i+1;
+                EnterEconomyService(current);
+                return current;
+            }
+        }
+        return -1;                              // no vacancy available
+    }
+
+    public int getEV(){                         // assigns a free spot, if available
+        for(int i=85;i<95;i++){
+            if(floor2[i]==0){
+                floor2[i]=1;
+                current = i+1;
+                EnterEVService(current);
+                return current;
+            }
+        }
+        return -1;                              // no vacancy available
+    }
+
+    public int getVIP(){                        // assigns a free spot, if available
+        for(int i=95;i<100;i++){
+            if(floor2[i]==0){
+                floor2[i]=1;
+                current = i+1;
+                EnterVIPService(current);
+                return current;
+            }
+        }
+        return -1;                              // no vacancy available
+    }
+
+    public int ExitEconomyService(int cur){
+        if(cur<1 || cur>85 || floor2[cur-1]==0){
+            System.out.println("Invalid spot");
+            return -1;
+        }
+        LocalTime tm = LocalTime.now();
+        then[cur - 1] = tm.getHour()*60 + tm.getMinute();
+        int time = then[cur - 1] - now[cur - 1];
+        return time;
+    }
+
+    private void EnterEconomyService(int cur){
+        LocalTime tm = LocalTime.now();
+        now[cur-1] = tm.getHour()*60+tm.getMinute();
+    }
+
+    private void EnterEVService(int cur){
+        LocalTime tm = LocalTime.now();
+        now[cur-1] = tm.getHour()*60+ tm.getMinute();
+        int recharge;
+        while(true) {
+            System.out.println("Do you want to recharge your vehicle? (1 for yes and 0 for no) >> ");
+            recharge = scan.nextInt();
+            if(recharge!=0 && recharge!=1){
+                System.out.println("Invalid option. Try again");
+            }
+            else
+                break;
+        }
+        rCharge[cur-1]=recharge;
+    }
+
+    public int ExitEVService(int cur){
+        if(cur<86 || cur>95 || floor2[cur-1]==0){
+            System.out.println("Invalid spot");
+            return -1;
+        }
+        LocalTime tm = LocalTime.now();
+        then[cur - 1] = tm.getHour()*60+tm.getMinute();
+        int time = then[cur - 1] - now[cur - 1];
+        return time;
+    }
+
+    private void EnterVIPService(int cur){
+        LocalTime tm = LocalTime.now();
+        now[cur-1] = tm.getHour()*60+tm.getMinute();
+        int wash;
+        while(true) {
+            System.out.println("Does your vehicle need a car wash? (1 for yes and 0 for no) >> ");
+            wash = scan.nextInt();
+            if(wash!=0 && wash!=1){
+                System.out.println("Invalid option. Try again");
+            }
+            else
+                break;
+        }
+        carWash[cur-1]=wash;
+    }
+
+    public int ExitVIPService(int cur){
+        if(cur<96 || cur>100 || floor2[cur-1]==0){
+            System.out.println("Invalid spot");
+            return -1;
+        }
+        LocalTime tm = LocalTime.now();
+        then[cur - 1] = tm.getHour()*60+tm.getMinute();
+        int time = then[cur - 1] - now[cur - 1];
+        return time;
+    }
+
+
+}

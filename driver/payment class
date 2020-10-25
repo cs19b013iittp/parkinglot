@@ -1,0 +1,74 @@
+import java.time.LocalTime; 
+
+class Payment 
+{
+	private double cash;
+
+	public double getcash() 
+	{
+			return cash;
+			
+	    
+	}
+	public void setcash(double newvalue) 
+	{
+			this.cash = newvalue;
+		
+	    
+	}
+	public void paymentDetails() 
+	{
+			System.out.println("Total cash: Rs" +this.cash);
+		
+	    
+	}
+	
+    
+}
+	
+
+class Cardinfo extends Payment 
+{
+
+	private String ccnumber, cvvNumber, expiry;
+
+	Cardinfo(String ccnumber, String cvvnumber, String expiry ) 
+	{
+		
+		this.expiry = expiry;
+		this.cvvnumber = cvvnumber;
+		this.ccnumber = ccnumber;
+	}
+
+	
+
+}	
+	
+	
+	
+public class Ticket
+	{
+	    //int intime;
+	    //int outtime;
+	    
+	    LocalTime intime = LocalTime.now(); 
+	    LocalTime outtime = LocalTime.now();
+	    
+    	int totaltime = outtime - intime;
+  
+        void TotalFee()
+    	{
+
+    			if (totaltime <= 60)
+    				System.out.println("Total cash = 20");
+    			if (totaltime <= 180 && totaltime > 60)
+    			    System.out.println("Total cash = 30");
+    			else
+    				System.out.println("Total cash = 35");
+    		
+    		
+    	}
+
+}
+
+
